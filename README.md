@@ -1,173 +1,151 @@
-🧾 Student Monitoring Database Management System (SM-DBMS)
-📘 1. Database and DBMS Design
-1.1 Database Requirements
-1.1.1 Scenario
+# 🎓 Student Monitoring Database Management System (SM-DBMS)
 
-Managing student attendance and performance in an academic setting is made easier by the Student Monitoring Database Management System (SM-DBMS).
+## 1. Database and DBMS Design
 
-Teachers can log into the system to view their assigned classes, check the list of enrolled students, and record attendance for each class session. For every assessment conducted (e.g., quiz, assignment, or exam), teachers can enter grades, scores, and remarks.
+### 1.1 Database Requirements
 
-Students, in turn, can log in to monitor their academic progress — including attendance history and grades — helping them stay on track with their coursework.
+#### 1.1.1 Scenario
+The **Student Monitoring Database Management System (SM-DBMS)** simplifies the process of managing student attendance and academic performance.  
 
-The system ensures:
+Teachers can log into the system, view their assigned classes, and record attendance for each class session. They can also input grades for assessments such as quizzes, assignments, and exams, along with remarks and scores.  
 
-Smooth data handling and linkage between classes, teachers, and students.
+Students can log in to monitor their academic progress, view attendance history, and track grades for all assessments they have taken.  
 
-A clear, easy-to-use interface for teachers to monitor progress.
+The system:
+- Ensures smooth data handling between teachers, students, and classes.
+- Provides a user-friendly interface for teachers to track progress.
+- Offers students transparent access to their academic data for accountability.
 
-Transparency and accountability by providing students access to their academic records.
+---
 
-1.1.2 Data Requirements
+### 1.1.2 Data Requirements
 
-The SM-DBMS maintains structured records for all entities involved in academic monitoring.
+#### Entities and Attributes
+**Teacher**  
+`teacher_id (PK), first_name, last_name, phone_number, subject_expertise`
 
-Entities and Attributes:
+**Student**  
+`student_id (PK), first_name, last_name, date_of_birth, phone_number, enrollment_date`
 
-Teacher
-(teacher_id PK, first_name, last_name, phone_number, subject_expertise)
+**Class**  
+`class_id (PK), class_name, academic_year, scheduled_days`
 
-Student
-(student_id PK, first_name, last_name, date_of_birth, phone_number, enrollment_date)
+**Grades**  
+`grade_id (PK), assessment_type, score, remarks`
 
-Class
-(class_id PK, class_name, academic_year, scheduled_days)
+**Attendance**  
+`attendance_id (PK), date, status`
 
-Grades
-(grade_id PK, assessment_type, score, remarks)
+#### Relationships
+- A teacher can teach multiple classes, but each class is taught by one teacher.  
+- A class can have many students, and each student can belong to multiple classes.  
+- A student can have multiple attendance and grade records associated with their classes.  
 
-Attendance
-(attendance_id PK, date, status)
+The database enforces these relationships through primary and foreign keys, ensuring data integrity and consistency.
 
-Relationships:
+---
 
-Each teacher can teach multiple classes, but each class has one teacher.
+### 1.1.3 User and System Requirements
 
-Each class can have multiple students, and each student can belong to multiple classes.
+#### 👩‍💼 User Requirements
 
-Each student can have multiple attendance and grade records associated with their classes.
+**Admin**
+- **Insert:** Add teachers, students, classes, grades, attendance records, and phone numbers.  
+- **Update:** Modify phone numbers, class details, and student-class links.  
+- **Delete:** Remove teachers, students, classes, phone numbers, attendance, and grades by ID.  
+- **Select:** View and search all records.  
+- **Save:** Save changes to `.dat` files for persistence.  
 
-The database enforces these relationships to ensure integrity and consistency between all components.
+**Teacher**
+- **Insert:** Add students to assigned classes and record attendance or grades.  
+- **Update:** Update attendance status or grade information.  
+- **Select:** View students, attendance, and grade records for their classes.  
+- **Delete:** Remove students from a class when needed.  
 
-1.1.3 User and System Requirements
-👩‍💼 User Requirements
-Admin:
+**Student**
+- **Select:**  
+  - View enrolled class information and schedules.  
+  - View attendance history.  
+  - View grades and remarks for all assessments.  
 
-Responsible for full database management.
-Operations:
+---
 
-Insert: Add teachers, students, classes, grades, attendance, and teacher phone numbers.
+### ⚙️ System Requirements
 
-Update: Modify class details, phone numbers, and student assignments.
+#### Functional Requirements
+- **Data Storage and Management:**  
+  Uses binary `.dat` files to store and manage teachers, students, classes, attendance, and grades.
 
-Delete: Remove teachers, students, classes, phone numbers, grades, and attendance records by ID or composite keys.
+- **Transaction Management:**  
+  - **Atomicity:** Operations are fully completed or rolled back on failure.  
+  - **Consistency:** Data remains valid after every transaction.  
+  - **Isolation:** Multiple users can access data without interference.  
+  - **Durability:** Committed data is saved permanently.
 
-Select: View or search all records in the database.
+- **User Management and Security:**  
+  Role-based access ensures users can only perform authorized actions.
 
-Save: Commit all modifications to the .dat files for data persistence.
+- **Constraints Enforcement:**  
+  Primary and foreign keys maintain valid relationships among entities.
 
-Teacher:
+#### Non-Functional Requirements
+- **Performance:** Efficient file-handling and indexing for fast operations.  
+- **Data Security:** Controlled access based on user roles.  
+- **Usability:** Simple, menu-driven interface for ease of use.  
 
-Manages attendance and grades for assigned classes.
-Operations:
+---
 
-Insert: Add students to their classes, record attendance, and add grades.
+## 2. Project Structure Overview
 
-Update: Modify attendance status, assessment types, or grades.
+The system is developed in **C** and uses `.dat` files for persistent storage.  
+Each module (`.c` and `.h` files) is responsible for specific functionalities.  
 
-Select: View students, their attendance, and performance records.
+### 📂 Folder and File Structure
 
-Delete: Remove student-class relationships if necessary.
+| File/Folder | Type | Description |
+|--------------|------|-------------|
+| `.vscode/` | Folder | Visual Studio Code configuration files |
+| `main.c` | C Source | Entry point of the program; contains the main menu and logic for user roles |
+| `attendance_grades.c` / `attendance_grades.h` | C Source & Header | Manage attendance and grades (insert, update, delete, search) |
+| `classes_students.c` / `classes_students.h` | C Source & Header | Manage student-class relationships and class data |
+| `teacher.c` / `teacher.h` | C Source & Header | Manage teacher data and phone numbers |
+| `students.dat` | Data File | Stores student information |
+| `teachers.dat` | Data File | Stores teacher information |
+| `classes.dat` | Data File | Stores class details |
+| `grades.dat` | Data File | Stores grades and remarks |
+| `attendance.dat` | Data File | Stores attendance records |
+| `Class_Student.dat` | Data File | Links students to their classes |
+| `teacher_phonenumbers.dat` | Data File | Stores each teacher’s phone numbers |
 
-Student:
+Each `.dat` file acts as a **database table**, storing binary data that represents records for each entity.
 
-Can view personal data and academic records.
-Operations:
+---
 
-Select:
+## 3. Technologies Used
 
-View enrolled class details and schedules.
+- **Programming Language:** C  
+- **Data Storage:** Binary File Handling (`.dat` files)  
+- **Programming Paradigm:** Modular Programming  
+- **Development Environment:** Visual Studio Code  
 
-Check attendance records.
+---
 
-View grades and remarks for each assessment.
+## 4. Features
 
-⚙️ System Requirements
-Functional Requirements:
+- Role-based access for Admin, Teacher, and Student  
+- Add, update, delete, and search data records  
+- Track attendance and grades per class  
+- Persistent data storage using `.dat` files  
+- Secure, organized, and user-friendly command-line interface  
 
-Data Storage & Management:
-All data (teachers, students, classes, attendance, and grades) is stored in .dat files using binary file handling for persistence.
+---
 
-Transaction Management:
+## 5. Author
 
-Atomicity: Transactions (insert, update, delete) are fully completed or rolled back.
+**Project Title:** Student Monitoring Database Management System (SM-DBMS)  
+**Developer:** Shahad Feras  
+**Institution:** Hashemite University  
+**Course:** Database Programming  
+**Year:** 2025  
 
-Consistency: Data remains valid after every operation.
-
-Isolation: Concurrent access does not cause interference.
-
-Durability: Data changes are permanently saved to disk.
-
-User Management & Security:
-Role-based access ensures teachers, students, and admins only perform allowed operations.
-
-Constraint Enforcement:
-Primary and foreign keys maintain data integrity between entities.
-
-Non-Functional Requirements:
-
-Performance:
-Efficient file-handling and in-memory data structures ensure fast retrieval and updates.
-
-Data Security:
-Access control prevents unauthorized modifications.
-
-Usability:
-Menu-driven interface simplifies user interaction with the system.
-
-📁 Project Structure Overview
-
-This project uses C language for logic and .dat files for persistent data storage.
-The structure of files (as shown in your screenshot) is as follows:
-
-File/Folder	Type	Description
-.vscode/	Folder	VS Code configuration files.
-main.c	C Source File	The entry point of the system; initializes menus and user roles (Admin, Teacher, Student).
-attendance_grades.c / .h	C Source & Header	Functions for managing attendance and grades — including insert, update, delete, and search operations.
-classes_students.c / .h	C Source & Header	Handles linking students to classes, and manages class-related data.
-teacher.c / .h	C Source & Header	Manages teacher data including insertion, updates, and phone numbers.
-*.dat Files	Data Files	Store persistent records for each entity (students, teachers, classes, attendance, grades).
-🗂 Example Data Files:
-
-students.dat → Student records.
-
-teachers.dat → Teacher details.
-
-classes.dat → Class information.
-
-grades.dat → Grade records per assessment.
-
-attendance.dat → Attendance history.
-
-Class_Student.dat → Relationship between students and classes.
-
-teacher_phonenumbers.dat → Stores each teacher’s contact numbers.
-
-Each .dat file acts as a mini-database table, while .c and .h files define modules that handle the logic for reading, writing, updating, and displaying that data.
-
-🧩 Technologies Used
-
-Language: C
-
-Data Storage: Binary File Handling (.dat files)
-
-Paradigm: Modular Programming
-
-Development Environment: Visual Studio Code
-
-🚀 Features
-
-✅ Role-based access for Admin, Teacher, and Student
-✅ Add, update, delete, and search records
-✅ Attendance and grades linked automatically to classes
-✅ Persistent data storage using .dat files
-✅ User-friendly menu navigation
+---
